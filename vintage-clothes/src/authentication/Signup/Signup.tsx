@@ -1,5 +1,5 @@
-import { MutableRefObject, useEffect, useRef, useState } from "react";
-import { PWD_REGEX, USER_REGEX } from "../../core/constants";
+import { useEffect, useRef, useState } from "react";
+import { SIGNUP_PASSWORD_REGEX, SIGNUP_USER_REGEX } from "../../core/constants";
 import { Button } from "@material-ui/core";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -15,8 +15,8 @@ import '../Signup/Signup.scss'
 
 const Signup = () => {
 
-    const userRef = useRef() as MutableRefObject<HTMLDivElement>;
-    const errRef = useRef();
+    const userRef = useRef<HTMLTextAreaElement>(null);
+    const errorRef = useRef<HTMLParagraphElement>(null);
 
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
@@ -34,18 +34,18 @@ const Signup = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(() => {
-        //userRef.current.focus();
+        userRef.current?.focus();
     }, []);
 
     useEffect(() => {
-        const result = USER_REGEX.test(user);
+        const result = SIGNUP_USER_REGEX.test(user);
         console.log(result);
         console.log(user);
         setValidName(result);
     }, [user]);
 
     useEffect(() => {
-        const result = PWD_REGEX.test(password);
+        const result = SIGNUP_PASSWORD_REGEX.test(password);
         console.log(result);
         console.log(password);
         console.log(result);
@@ -57,104 +57,127 @@ const Signup = () => {
         setErrorMessage('');
     }, [user, password, matchPassword])
 
+    const handleSubmit = async (e: any) => {
+        e.preventDefault();
+
+        const checkUser = SIGNUP_USER_REGEX.test(user);
+        const checkPassword = SIGNUP_PASSWORD_REGEX.test(password);
+        
+        if (!checkUser || !checkPassword) {
+            setErrorMessage("Invalid Entry!");
+            return;
+        }
+
+        console.log(user, password);
+        setSuccess(true);
+    }
+
     return (
         <>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}>
-                    <Avatar sx={{ m: 5 }}>
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Welcome to Vintage Clothes
-                        <span className="signup-subtitle">
-                        </span>
-                    </Typography>
-                    <Box component="form" noValidate sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="given-name"
-                                    name="firstName"
-                                    required
+            <section>
+                <form onSubmit={handleSubmit}>
+                    <Container component="main" maxWidth="xs">
+                        <p ref={errorRef} className={errorMessage ? "errorMessage" : "offscreen"} aria-live="assertive"> {errorMessage} </p>
+                        <CssBaseline />
+                        <Box sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}>
+                            <Avatar sx={{ m: 5 }}>
+                            </Avatar>
+                            <Typography component="h1" variant="h5">
+                                Welcome to Vintage Clothes
+                                <span className="signup-subtitle">
+                                </span>
+                            </Typography>
+                            <Box sx={{ mt: 3 }}>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            autoComplete="given-name"
+                                            name="firstName"
+                                            required
+                                            fullWidth
+                                            id="firstName"
+                                            label="First Name"
+                                            autoFocus
+                                            aria-describedby="uidnote"
+                                            onFocus={() => setUserFocus(true)}
+                                            onBlur={() => setUserFocus(false)}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="lastName"
+                                            label="Last Name"
+                                            name="lastName"
+                                            autoComplete="family-name"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            label="Email Address"
+                                            name="email"
+                                            autoComplete="email"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="password"
+                                            label="Password"
+                                            type="password"
+                                            id="password"
+                                            autoComplete="new-password"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="confirmPassword"
+                                            label="Confirm Password"
+                                            type="password"
+                                            id="confirmPassword"
+                                            autoComplete="new-password"
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <FormControlLabel
+                                            sx={{ m: 2 }}
+                                            control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                            label="Receive information about future sellouts"
+                                            labelPlacement='end'
+                                        />
+                                    </Grid>
+                                </Grid>
+                                <Button
+                                    type="submit"
                                     fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="family-name"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    autoComplete="email"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    required
-                                    fullWidth
-                                    name="confirmPassword"
-                                    label="Confirm Password"
-                                    type="password"
-                                    id="confirmPassword"
-                                    autoComplete="new-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    sx={{ m: 2 }}
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="Receive information about future sellouts"
-                                    labelPlacement='end'
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            color="primary"
-                            variant="contained">
-                            Sign Up
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
+                                    color="primary"
+                                    variant="contained">
+                                    Sign Up
+                                </Button>
+                                <Grid container justifyContent="flex-end">
+                                    <Grid item sx={{ mt: 1.25 }}>
+                                        <Link href="#" variant="body2">
+                                            Already have an account? Sign in
+                                        </Link>
+                                    </Grid>
+                                </Grid>
+                            </Box>
+                        </Box>
+                    </Container>
+                </form>
+            </section>
         </>
     )
 }
