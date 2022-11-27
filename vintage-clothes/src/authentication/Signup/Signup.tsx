@@ -100,8 +100,8 @@ const Signup = () => {
                                             name="firstName"
                                             required
                                             fullWidth
-                                            id="firstName"
                                             label="First Name"
+                                            id="firstName"
                                             autoFocus
                                             aria-describedby="uidnote"
                                             onFocus={() => setUserFocus(true)}
@@ -112,9 +112,9 @@ const Signup = () => {
                                         <TextField
                                             required
                                             fullWidth
-                                            id="lastName"
-                                            label="Last Name"
                                             name="lastName"
+                                            label="Last Name"
+                                            id="lastName"
                                             autoComplete="family-name"
                                         />
                                     </Grid>
@@ -122,9 +122,9 @@ const Signup = () => {
                                         <TextField
                                             required
                                             fullWidth
-                                            id="email"
-                                            label="Email Address"
                                             name="email"
+                                            label="Email Address"
+                                            id="email"
                                             autoComplete="email"
                                         />
                                     </Grid>
