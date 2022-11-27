@@ -5,7 +5,6 @@ function Main() {
     return(
         <div>
             <Signup />
-            <Signin />
         </div>
     );
 }
