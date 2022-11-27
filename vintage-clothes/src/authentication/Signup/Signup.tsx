@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { SIGNUP_PASSWORD_REGEX, SIGNUP_USER_REGEX } from "../../core/constants";
+import { SIGNUP_PASSWORD_REGEX, SIGNUP_URL, SIGNUP_USER_REGEX } from "../../core/constants";
+import axios from "../../api/axios";
 import { Button } from "@material-ui/core";
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -51,7 +52,7 @@ const Signup = () => {
 
     useEffect(() => {
         setErrorMessage('');
-    }, [user, password, matchPassword])
+    }, [user, password, matchPassword]);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -64,8 +65,36 @@ const Signup = () => {
             return;
         }
 
-        console.log(user, password);
-        setSuccess(true);
+        try {
+
+            const response = await axios.post(SIGNUP_URL,
+                JSON.stringify({ user, password }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                });
+
+
+            console.log(JSON.stringify(response));
+
+            setSuccess(true);
+
+            setUser('');
+            setPassword('');
+            setMatchPassword('');
+
+        } catch (error: any) {   //any or Error (try)
+            if (!error?.response) {
+                setErrorMessage('No Server Response!');
+            } else if (error.response?.status === 409) {
+                setErrorMessage('Username Taken');
+            } else {
+                setErrorMessage('Registration Failed');
+            }
+
+            errorRef.current?.focus();
+        }
+
     }
 
     return (
