@@ -45,12 +45,8 @@ const Signup = () => {
     }, [user]);
 
     useEffect(() => {
-        const result = SIGNUP_PASSWORD_REGEX.test(password);
-        console.log(result);
-        console.log(password);
-        console.log(result);
-        const match = password === matchPassword;
-        setValidPassword(match);
+        setValidPassword(SIGNUP_PASSWORD_REGEX.test(password));
+        setValidMatch(password === matchPassword);
     }, [password, matchPassword]);
 
     useEffect(() => {
