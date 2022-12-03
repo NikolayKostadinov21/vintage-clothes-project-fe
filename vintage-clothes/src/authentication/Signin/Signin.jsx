@@ -1,8 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
+import axios from "../../api/axios";
 import '../Signin/Signin.scss'
+import { SIGNIN_URL } from "../../core/constants";
 
 const Signin = () => {
-
+    const { setAuth } = useContext(AuthContext);
     const userRef = useRef();
     const errorRef = useRef();
 
@@ -21,11 +24,36 @@ const Signin = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(user, password);
-        setUser('');
-        setPassword('');
-        setSuccess(true);
 
+        try {
+
+            const response = await axios.post(SIGNIN_URL,
+                JSON.stringify({user, password}),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+
+            console.log(typeof response);
+            console.log(JSON.stringify(response?.data));
+
+            setAuth({user, password});
+            setUser('');
+            setPassword('');
+            setSuccess(true)
+
+        } catch(error) {
+            if (!error.response) {
+                setErrorMessage('No server response');
+            } else if (error.response?.status === 400) {
+                //Missing username or password
+                setErrorMessage('Bad credentials');
+            } else {
+                setErrorMessage('Login failed');
+            }
+            errorRef.current.focus()
+        }
     }
 
     return (
