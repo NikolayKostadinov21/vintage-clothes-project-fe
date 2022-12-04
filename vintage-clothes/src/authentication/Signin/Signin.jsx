@@ -129,13 +129,13 @@ const Signin = () => {
                                     <div className="method-control">
                                         <a href="#" className="method-action">
                                             <img className="signin-google-facebook-icons" src={google_logo} />
-                                            <span>Sign in with Google</span>
+                                            <span>Continue with Google</span>
                                         </a>
                                     </div>
                                     <div className="method-control">
                                         <a href="#" className="method-action">
                                             <img className="signin-google-facebook-icons" src={facebook_logo} />
-                                            <span>Sign in with Facebook</span>
+                                            <span>Continue with Facebook</span>
                                         </a>
                                     </div>
                                 </div>
