@@ -1,5 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import axios from "../../api/axios";
+import '../Signup/Signup.scss';
+import facebook_logo from '../../icons/facebook-round-color-icon.svg';
+import google_logo from '../../icons/google-color-icon.svg';
 import { SIGNUP_PASSWORD_REGEX, SIGNUP_URL, SIGNUP_USER_REGEX } from "../../core/constants";
 
 const Signup = () => {
@@ -54,7 +57,7 @@ const Signup = () => {
             }
         );
 
-        console.log({username, email, password})
+        console.log({ username, email, password })
 
         try {
             console.log(JSON.stringify(response));
@@ -95,106 +98,130 @@ const Signup = () => {
                         </p>
                     </section>
                 ) : (
-                    <section>
-                        <p ref={errRef} className={errorMessage ? "errorMessage" : "offscreen"} aria-live="assertive">{errorMessage}</p>
+                    <div className="signup-container">
+                        <div className="container">
+                            <div className="wrapper">
 
-                        <h1>Sign up</h1>
+                                <p ref={errRef} className={errorMessage ? "errorMessage" : "offscreen"} aria-live="assertive">{errorMessage}</p>
 
-                        <form onSubmit={onSubmit}>
+                                <div className="heading">
+                                    <h1 className="text text-large">Sign up</h1>
+                                </div>
 
-                            <label htmlFor="username">
-                                Username:
-                            </label>
+                                <form onSubmit={onSubmit} className="form">
+                                    <div className="input-control">
+                                        <label htmlFor="username" hidden>
+                                            Username:
+                                        </label>
 
-                            <input
-                                type="text"
-                                id="username"
-                                ref={userRef}
-                                onChange={(e) => setUser(e.target.value)}
-                                value={username}
-                                required
-                                aria-invalid={validName ? "false" : "true"}
-                                aria-describedby="uidnote"
-                                onFocus={() => setUserFocus(true)}
-                                onBlur={() => setUserFocus(false)}
-                            />
-                            <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
-                                4 to 24 characters. <br />
-                                Must begin with a letter. <br />
-                                Letters, numbers, underscores, hyphens allowed <br />
-                            </p>
+                                        <input
+                                            type="text"
+                                            id="username"
+                                            ref={userRef}
+                                            onChange={(e) => setUser(e.target.value)}
+                                            value={username}
+                                            className="input-field"
+                                            placeholder="Username"
+                                            required
+                                            aria-invalid={validName ? "false" : "true"}
+                                            aria-describedby="uidnote"
+                                            onFocus={() => setUserFocus(true)}
+                                            onBlur={() => setUserFocus(false)}
+                                        />
+                                    </div>
 
-                            <label htmlFor="email">
-                                Email:
-                            </label>
+                                    <div className="input-control">
+                                        <label htmlFor="email" hidden>
+                                            Email:
+                                        </label>
 
-                            <input
-                                type="text"
-                                id="email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                                required
-                                aria-invalid={validName ? "false" : "true"}
-                                aria-describedby="uidnote"
-                                onFocus={() => setEmailfocus(true)}
-                                onBlur={() => setEmailfocus(false)}
-                            />
-                            <p id="uidnote" className={emailfocus && email && !validEmail ? "instructions" : "offscreen"}>
-                                4 to 24 characters. <br />
-                                Must begin with a letter. <br />
-                                Letters, numbers, underscores, hyphens allowed <br />
-                            </p>
+                                        <input
+                                            type="text"
+                                            id="email"
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            value={email}
+                                            className="input-field"
+                                            placeholder="Email"
+                                            required
+                                            aria-invalid={validName ? "false" : "true"}
+                                            aria-describedby="uidnote"
+                                            onFocus={() => setEmailfocus(true)}
+                                            onBlur={() => setEmailfocus(false)}
+                                        />
+                                    </div>
 
-                            <label htmlFor="password">
-                                Password:
-                            </label>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                value={password}
-                                required
-                                aria-invalid={validPassword ? "false" : "true"}
-                                aria-describedby="passwordnote"
-                                onFocus={() => setPasswordFocus(true)}
-                                onBlur={() => setPasswordFocus(false)}
-                            />
-                            <p id="passwordnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
-                                8 to 24 characters.<br />
-                                Must include uppercase and lowercase letters, a number and a special character.<br />
-                                Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                            </p>
+                                    <div className="input-control">
+                                        <label htmlFor="password" hidden>
+                                            Password:
+                                        </label>
+                                        <input
+                                            type="password"
+                                            id="password"
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            value={password}
+                                            className="input-field"
+                                            placeholder="Password"
+                                            required
+                                            aria-invalid={validPassword ? "false" : "true"}
+                                            aria-describedby="passwordnote"
+                                            onFocus={() => setPasswordFocus(true)}
+                                            onBlur={() => setPasswordFocus(false)}
+                                        />
+                                    </div>
 
-                            <label htmlFor="confirmPassword">
-                                Confirm Password:
-                            </label>
-                            <input
-                                type="password"
-                                id="confirmPassword"
-                                onChange={(e) => setMatchPassword(e.target.value)}
-                                value={matchPassword}
-                                required
-                                aria-invalid={validMatch ? "false" : "true"}
-                                aria-describedby="confirmnote"
-                                onFocus={() => setMatchFocus(true)}
-                                onBlur={() => setMatchFocus(false)}
-                            />
-                            <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                                Must match the first password input field.
-                            </p>
+                                    <div className="input-control">
+                                        <label htmlFor="confirmPassword" hidden>
+                                            Confirm Password:
+                                        </label>
+                                        <input
+                                            type="password"
+                                            id="confirmPassword"
+                                            onChange={(e) => setMatchPassword(e.target.value)}
+                                            value={matchPassword}
+                                            className="input-field"
+                                            placeholder="Confirm Password"
+                                            required
+                                            aria-invalid={validMatch ? "false" : "true"}
+                                            aria-describedby="confirmnote"
+                                            onFocus={() => setMatchFocus(true)}
+                                            onBlur={() => setMatchFocus(false)}
+                                        />
+                                    </div>
 
-                            <button disabled={!validName || !validPassword || !validMatch ? true : false}>Sign up</button>
-                        </form>
+                                    <div className="input-control">
+                                        <input type="submit" className="input-submit" value="Sign Up" />
+                                    </div>
 
-                        <p>
-                            Already signed up? <br />
-                            <span className="line">
-                                {/* routerLink here */}
-                                <a href="#">Sign In</a>
-                            </span>
-                        </p>
+                                    <div className="striped">
+                                        <span className="striped-line"></span>
+                                        <span className="striped-text">Or</span>
+                                        <span className="striped-line"></span>
+                                    </div>
 
-                    </section>
+                                    <div className="method">
+                                        <div className="method-control">
+                                            <a href="#" className="method-action">
+                                                <img className="signin-google-facebook-icons" src={google_logo} />
+                                                <span>Continue with Google</span>
+                                            </a>
+                                        </div>
+                                        <div className="method-control">
+                                            <a href="#" className="method-action">
+                                                <img className="signin-google-facebook-icons" src={facebook_logo} />
+                                                <span>Continue with Facebook</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <p className="text text-normal signup-end-signin-text">
+                                        Already have an account?
+                                        <span className="line">
+                                            <a href="#" className="text text-links">Sign in</a>
+                                        </span>
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 )
             }
         </>

@@ -4,7 +4,7 @@ import Signup from "../authentication/Signup/Signup";
 function Main() {
     return(
         <div>
-            <Signin />
+            <Signup />
         </div>
     );
 }
