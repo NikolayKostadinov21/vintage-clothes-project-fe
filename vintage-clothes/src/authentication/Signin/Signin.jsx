@@ -1,8 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthProvider";
+import axios from "../../api/axios";
 import '../Signin/Signin.scss'
+import { SIGNIN_URL } from "../../core/constants";
 
 const Signin = () => {
-
+    const { setAuth } = useContext(AuthContext);
     const userRef = useRef();
     const errorRef = useRef();
 
@@ -21,62 +24,104 @@ const Signin = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log(user, password);
-        setUser('');
-        setPassword('');
-        setSuccess(true);
 
+        try {
+
+            const response = await axios.post(SIGNIN_URL,
+                JSON.stringify({user, password}),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+
+            console.log(typeof response);
+            console.log(JSON.stringify(response?.data));
+
+            setAuth({user, password});
+            setUser('');
+            setPassword('');
+            setSuccess(true)
+
+        } catch(error) {
+            if (!error.response) {
+                setErrorMessage('No server response');
+            } else if (error.response?.status === 400) {
+                //Missing username or password
+                setErrorMessage('Bad credentials');
+            } else {
+                setErrorMessage('Login failed');
+            }
+            errorRef.current.focus()
+        }
     }
 
     return (
         <>
             {
                 success ? (
-                    <section>
+                    <main>
 
-                        <h1>You are logged in!</h1>
-                        <br />
-                        <p>
-                            <a href="#">Go to Dashboard</a>
-                        </p>
-                    </section>
+                <section>
+
+                    <h1>You are logged in!</h1>
+                    <br />
+                    <p>
+                        <a href="#">Go to Dashboard</a>
+                    </p>
+                </section>
+                    </main>
                 ) : (
+                    <section className="container">
+                        <div className="wrapper">
 
-                    <section>
-                        <p ref={errorRef} className={errorMessage ? "errormessage" : "offscreen"} aria-live="assertive">{errorMessage}</p>
+                            <p ref={errorRef} className={errorMessage ? "errormessage" : "offscreen"} aria-live="assertive">{errorMessage}</p>
 
-                        <h1>Sign in</h1>
+                            <div className="heading">
+                                <h1 className="text text-large">Sign in</h1>
+                            </div>
 
-                        <form onSubmit={handleSubmit}>
-                            <label htmlFor="username">Username: </label>
-                            <input
-                                type="text"
-                                id="username"
-                                ref={userRef}
-                                autoComplete="off"
-                                onChange={(event) => setUser(event.target.value)}
-                                value={user}
-                                required
-                            />
+                            <form onSubmit={handleSubmit} className="form">
+                                <div className="input-control">
+                                    <label htmlFor="username" className="input-label" hidden >Username: </label>
+                                    <input
+                                        type="text"
+                                        id="username"
+                                        placeholder="Username"
+                                        ref={userRef}
+                                        autoComplete="off"
+                                        onChange={(event) => setUser(event.target.value)}
+                                        value={user}
+                                        required
+                                    />
+                                </div>
 
-                            <label htmlFor="password">Password: </label>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(event) => setPassword(event.target.value)}
-                                value={password}
-                                required
-                            />
+                                <div className="input-control">
 
-                            <button>Sign in</button>
-                        </form>
+                                    <label htmlFor="password" className="input-label" hidden >Password: </label>
+                                    <input
+                                        type="password"
+                                        id="password"
+                                        placeholder="Password"
+                                        onChange={(event) => setPassword(event.target.value)}
+                                        value={password}
+                                        required
+                                    />
+                                </div>
 
-                        <p>
-                            Don't have an Account? <br />
-                            <span className="line">
-                                <a href="#">Sign up</a>
-                            </span>
-                        </p>
+                                <div className="input-control">
+                                <button>Sign in</button>
+                                    </div>
+                            </form>
+
+                            <p className="text text-normal">
+                                Don't have an Account? <br />
+                                <span className="line">
+                                    <a href="#" className="text text-links">Sign up</a>
+                                </span>
+                            </p>
+
+                        </div>
                     </section>
                 )}
         </>

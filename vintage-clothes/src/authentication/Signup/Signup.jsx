@@ -7,9 +7,13 @@ const Signup = () => {
     const userRef = useRef();
     const errRef = useRef();
 
-    const [user, setUser] = useState('');
+    const [username, setUser] = useState('');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
+
+    const [email, setEmail] = useState('');
+    const [validEmail, setValidEmail] = useState(false);
+    const [emailfocus, setEmailfocus] = useState(false);
 
     const [password, setPassword] = useState('');
     const [validPassword, setValidPassword] = useState(false);
@@ -27,8 +31,8 @@ const Signup = () => {
     }, []);
 
     useEffect(() => {
-        setValidName(SIGNUP_USER_REGEX.test(user))
-    }, [user]);
+        setValidName(SIGNUP_USER_REGEX.test(username))
+    }, [username]);
 
     useEffect(() => {
         setValidPassword(SIGNUP_PASSWORD_REGEX.test(password));
@@ -37,20 +41,25 @@ const Signup = () => {
 
     useEffect(() => {
         seterrorMessage('');
-    }, [user, password, matchPassword]);
+    }, [username, email, password, matchPassword]);
 
     const onSubmit = async (event) => {
         event.preventDefault();
 
-        if (!SIGNUP_USER_REGEX.test(user) && !SIGNUP_PASSWORD_REGEX.test(password)) {
-            seterrorMessage('Invalid Entry!');
-            return;
-        }
+        axios.post(SIGNUP_URL,
+            JSON.stringify({ username, email, password }),
+            {
+                headers: { 'Content-type': 'application/json' },
+                withCredentials: true
+            }
+        );
+
+        console.log({username, email, password})
 
         try {
             console.log(JSON.stringify(response));
             const response = await axios.post(SIGNUP_URL,
-                JSON.stringify({ user, password }),
+                JSON.stringify({ username, password }),
                 {
                     headers: { 'Content-type': 'application/json' },
                     withCredentials: true
@@ -102,14 +111,35 @@ const Signup = () => {
                                 id="username"
                                 ref={userRef}
                                 onChange={(e) => setUser(e.target.value)}
-                                value={user}
+                                value={username}
                                 required
                                 aria-invalid={validName ? "false" : "true"}
                                 aria-describedby="uidnote"
                                 onFocus={() => setUserFocus(true)}
                                 onBlur={() => setUserFocus(false)}
                             />
-                            <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
+                            <p id="uidnote" className={userFocus && username && !validName ? "instructions" : "offscreen"}>
+                                4 to 24 characters. <br />
+                                Must begin with a letter. <br />
+                                Letters, numbers, underscores, hyphens allowed <br />
+                            </p>
+
+                            <label htmlFor="email">
+                                Email:
+                            </label>
+
+                            <input
+                                type="text"
+                                id="email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                value={email}
+                                required
+                                aria-invalid={validName ? "false" : "true"}
+                                aria-describedby="uidnote"
+                                onFocus={() => setEmailfocus(true)}
+                                onBlur={() => setEmailfocus(false)}
+                            />
+                            <p id="uidnote" className={emailfocus && email && !validEmail ? "instructions" : "offscreen"}>
                                 4 to 24 characters. <br />
                                 Must begin with a letter. <br />
                                 Letters, numbers, underscores, hyphens allowed <br />
