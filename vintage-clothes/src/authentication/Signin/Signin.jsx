@@ -1,8 +1,10 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import AuthContext from "../../context/AuthProvider";
 import axios from "../../api/axios";
-import '../Signin/Signin.scss'
+import '../Signin/Signin.scss';
 import { SIGNIN_URL } from "../../core/constants";
+import facebook_logo from '../../icons/facebook-round-color-icon.svg';
+import google_logo from '../../icons/google-color-icon.svg';
 
 const Signin = () => {
     const { setAuth } = useContext(AuthContext);
@@ -28,7 +30,7 @@ const Signin = () => {
         try {
 
             const response = await axios.post(SIGNIN_URL,
-                JSON.stringify({user, password}),
+                JSON.stringify({ user, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -38,12 +40,12 @@ const Signin = () => {
             console.log(typeof response);
             console.log(JSON.stringify(response?.data));
 
-            setAuth({user, password});
+            setAuth({ user, password });
             setUser('');
             setPassword('');
             setSuccess(true)
 
-        } catch(error) {
+        } catch (error) {
             if (!error.response) {
                 setErrorMessage('No server response');
             } else if (error.response?.status === 400) {
@@ -62,14 +64,14 @@ const Signin = () => {
                 success ? (
                     <main>
 
-                <section>
+                        <section>
 
-                    <h1>You are logged in!</h1>
-                    <br />
-                    <p>
-                        <a href="#">Go to Dashboard</a>
-                    </p>
-                </section>
+                            <h1>You are logged in!</h1>
+                            <br />
+                            <p>
+                                <a href="#">Go to Dashboard</a>
+                            </p>
+                        </section>
                     </main>
                 ) : (
                     <div className="signin-container">
@@ -112,9 +114,31 @@ const Signin = () => {
                                     </div>
 
                                     <div className="input-control">
-                                    <button>Sign in</button>
-                                        </div>
+                                            <a href="#" className="text text-links">Forgot Password</a>
+                                            <input type="submit" className="input-submit" value="Sign In"/>
+                                    </div>
                                 </form>
+
+                                <div className="striped">
+                                    <span className="striped-line"></span>
+                                    <span className="striped-text">Or</span>
+                                    <span className="striped-line"></span>
+                                </div>
+
+                                <div className="method">
+                                    <div className="method-control">
+                                        <a href="#" className="method-action">
+                                            <img className="signin-google-facebook-icons" src={google_logo} />
+                                            <span>Sign in with Google</span>
+                                        </a>
+                                    </div>
+                                    <div className="method-control">
+                                        <a href="#" className="method-action">
+                                            <img className="signin-google-facebook-icons" src={facebook_logo} />
+                                            <span>Sign in with Facebook</span>
+                                        </a>
+                                    </div>
+                                </div>
 
                                 <p className="text text-normal">
                                     Don't have an Account? <br />
