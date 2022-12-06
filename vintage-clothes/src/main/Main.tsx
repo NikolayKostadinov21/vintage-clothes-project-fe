@@ -1,3 +1,4 @@
+import React from "react";
 import Signin from "../authentication/Signin/Signin";
 import Signup from "../authentication/Signup/Signup";
 
