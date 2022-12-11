@@ -11,7 +11,7 @@ const Signin = () => {
     const userRef = useRef();
     const errorRef = useRef();
 
-    const [user, setUser] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [success, setSuccess] = useState(false);
@@ -22,7 +22,7 @@ const Signin = () => {
 
     useEffect(() => {
         setErrorMessage('');
-    }, [user, password]);
+    }, [email, password]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,7 +30,7 @@ const Signin = () => {
         try {
 
             const response = await axios.post(SIGNIN_URL,
-                JSON.stringify({ user, password }),
+                JSON.stringify({ email, password }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -40,8 +40,8 @@ const Signin = () => {
             console.log(typeof response);
             console.log(JSON.stringify(response?.data));
 
-            setAuth({ user, password });
-            setUser('');
+            setAuth({ email, password });
+            setEmail('');
             setPassword('');
             setSuccess(true)
 
@@ -86,16 +86,16 @@ const Signin = () => {
 
                                 <form onSubmit={handleSubmit} className="form">
                                     <div className="input-control">
-                                        <label htmlFor="username" className="input-label" hidden >Username: </label>
+                                        <label htmlFor="email" className="input-label" hidden >Email: </label>
                                         <input
                                             type="text"
-                                            id="username"
-                                            placeholder="Username"
+                                            id="email"
+                                            placeholder="Email"
                                             className="input-field"
                                             ref={userRef}
                                             autoComplete="off"
-                                            onChange={(event) => setUser(event.target.value)}
-                                            value={user}
+                                            onChange={(event) => setEmail(event.target.value)}
+                                            value={email}
                                             required
                                         />
                                     </div>
