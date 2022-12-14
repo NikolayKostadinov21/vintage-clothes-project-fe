@@ -4,6 +4,7 @@ import '../Signup/Signup.scss';
 import facebook_logo from '../../icons/facebook-round-color-icon.svg';
 import google_logo from '../../icons/google-color-icon.svg';
 import { SIGNUP_PASSWORD_REGEX, SIGNUP_URL, SIGNUP_USER_REGEX } from "../../core/constants";
+import { NavLink } from "react-router-dom";
 
 const Signup = () => {
 
@@ -215,7 +216,7 @@ const Signup = () => {
                                     <p className="text text-normal signup-end-signin-text">
                                         Already have an account?
                                         <span className="line">
-                                            <a href="#" className="text text-links">Sign in</a>
+                                            <NavLink to='/login' className={'text text-links'}>Sign in</NavLink>
                                         </span>
                                     </p>
                                 </form>
