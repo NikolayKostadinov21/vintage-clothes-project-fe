@@ -5,6 +5,7 @@ import '../Signin/Signin.scss';
 import { SIGNIN_URL } from "../../core/constants";
 import facebook_logo from '../../icons/facebook-round-color-icon.svg';
 import google_logo from '../../icons/google-color-icon.svg';
+import { NavLink } from "react-router-dom";
 
 const Signin = () => {
     const { setAuth } = useContext(AuthContext);
@@ -143,7 +144,7 @@ const Signin = () => {
                                 <p className="text text-normal">
                                     Don't have an Account? <br />
                                     <span className="line">
-                                        <a href="#" className="text text-links">Sign up</a>
+                                        <NavLink to='/register' className={'text text-links'}>Sign up</NavLink>
                                     </span>
                                 </p>
 
