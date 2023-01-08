@@ -5,7 +5,6 @@ const Home = () => {
     return (
         <>
             <Carousel></Carousel>
-            <GridLayout></GridLayout>
         </>
     );
 }
