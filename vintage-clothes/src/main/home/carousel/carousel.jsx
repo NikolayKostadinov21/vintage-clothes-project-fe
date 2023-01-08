@@ -1,5 +1,6 @@
 import Card from "./Card/Card";
 import '../carousel/carousel.scss'
+import '../carousel/carouselMovement'
 
 let btnpressnext;
 let btnpressprev
